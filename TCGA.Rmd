@@ -4,7 +4,7 @@ author: "Jun Kang"
 date: '2019 5 17 '
 output:
   beamer_presentation: 
-    colortheme: orchid
+    colortheme: dove
     fig_height: 4
     fonttheme: professionalfonts
     highlight: espresso
@@ -30,21 +30,36 @@ options(tinytex.verbose = TRUE)
 - Publicly available for anyone in the research community to use
 - https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga
 
+## R and Rstudio
+
+- https://www.r-project.org/
+- https://www.rstudio.com/
+
 ## TCGA genomic data
 
-- R and Rstudio
 - **RTCGAToolbox** package
 - **cgdsr** package
+- GDC Data Portal
+- Comprehensive research
 
-## Slide with R Output
+## RTCGAToolbox
 
-```{r RTCGAToolbox, echo = TRUE}
+- Linux (not Windows)
+- AWS https://aws.amazon.com/ko/
+- Mac ??
+
+## RTCGAToolbox
+- https://gdac.broadinstitute.org/
+- http://bioconductor.org/packages/release/bioc/html/RTCGAToolbox.html
+
+## RTCGAToolbox
+```{r RTCGAToolbox, echo=TRUE, cache=TRUE}
 library('RTCGAToolbox')
-getFirehoseDatasets()
-getFirehoseRunningDates(last = NULL)
+getFirehoseDatasets()[1:10]
+getFirehoseRunningDates(last = NULL)[1:3]
 ```
 
-## Read Data from Firehose
+## Read data from Firehose
 ```{r readData, echo=TRUE, message=FALSE, cache=TRUE}
 readData = getFirehoseData (dataset="BRCA", 
                             runDate="20160128",
@@ -65,26 +80,24 @@ mRNA <- t(getData(readData, 'RNASeq2GeneNorm'))
 mRNA[1:2, 1:2]
 ```
 
-
 ## cgdsr
 - cbioportal https://www.cbioportal.org/
-```{r cgdsr, echo=TRUE, message=FALSE}
+```{r cgdsr, echo=TRUE, message=FALSE, cache=TRUE}
 library(cgdsr)
 # Create CGDS object
 mycgds = CGDS("https://www.cbioportal.org/")
 
 # Get list of cancer studies at server
-getCancerStudies(mycgds)[1:2,]
+getCancerStudies(mycgds)[4:5,1]
 ```
 ## GDC Data Portal
 - https://portal.gdc.cancer.gov/
-
 
 ## Comprehensive research 
 - https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=33948919
 
 ## Comprehensive research
-```{r til plot, echo=TRUE, message=FALSE, warning=FALSE}
+```{r til plot, echo=TRUE, message=FALSE, warning=FALSE, cache=TRUE}
 Til_map <- read.delim('TILMap_TableS1.txt')
 library(dplyr)
 library(ggplot2)
@@ -93,7 +106,7 @@ ggplot(Til_map, aes(x=Study, y=Leukocyte.Fraction)) +
 ```
 
 ## SessionInfo
-```{r sessionInfo, echo=TRUE}
+```{r sessionInfo, echo=FALSE}
 library(pander)
 pander(sessionInfo())
 ```
