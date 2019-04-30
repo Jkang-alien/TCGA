@@ -1,0 +1,99 @@
+---
+title: "TCGA Cancer Genomic Analysis using R"
+author: "Jun Kang"
+date: '2019 5 17 '
+output:
+  beamer_presentation: 
+    colortheme: orchid
+    fig_height: 4
+    fonttheme: professionalfonts
+    highlight: espresso
+    keep_tex: yes
+    theme: CambridgeUS
+header-includes:
+- \usepackage{graphicx}
+- \usepackage{tikzpagenodes}
+- \usetikzlibrary{calc}
+- \usepackage{caption}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(tinytex.verbose = TRUE)
+```
+
+## The Cancer Genome Atlas (TCGA)
+
+- Landmark cancer genomics program
+- Over 20,000 primary cancer and matched normal samples spanning 33 cancer types
+- 2.5 petabytes of genomic, epigenomic, transcriptomic, and proteomic data
+- Publicly available for anyone in the research community to use
+- https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga
+
+## TCGA genomic data
+
+- R and Rstudio
+- **RTCGAToolbox** package
+- **cgdsr** package
+
+## Slide with R Output
+
+```{r RTCGAToolbox, echo = TRUE}
+library('RTCGAToolbox')
+getFirehoseDatasets()
+getFirehoseRunningDates(last = NULL)
+```
+
+## Read Data from Firehose
+```{r readData, echo=TRUE, message=FALSE, cache=TRUE}
+readData = getFirehoseData (dataset="BRCA", 
+                            runDate="20160128",
+                            forceDownload = TRUE,
+                            Clinic=TRUE, 
+                            RNASeq2GeneNorm=TRUE)
+```
+
+## Get clinical data
+```{r clinical data, echo=TRUE}
+clin <- getData(readData, "clinical")
+clin[1:2,1:2]
+```
+
+## Get mesengerRNA expresion data
+```{r mRNA, echo=TRUE, cache=TRUE}
+mRNA <- t(getData(readData, 'RNASeq2GeneNorm'))
+mRNA[1:2, 1:2]
+```
+
+
+## cgdsr
+- cbioportal https://www.cbioportal.org/
+```{r cgdsr, echo=TRUE, message=FALSE}
+library(cgdsr)
+# Create CGDS object
+mycgds = CGDS("https://www.cbioportal.org/")
+
+# Get list of cancer studies at server
+getCancerStudies(mycgds)[1:2,]
+```
+## GDC Data Portal
+- https://portal.gdc.cancer.gov/
+
+
+## Comprehensive research 
+- https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=33948919
+
+## Comprehensive research
+```{r til plot, echo=TRUE, message=FALSE, warning=FALSE}
+Til_map <- read.delim('TILMap_TableS1.txt')
+library(dplyr)
+library(ggplot2)
+ggplot(Til_map, aes(x=Study, y=Leukocyte.Fraction)) +
+         geom_boxplot()
+```
+
+## SessionInfo
+```{r sessionInfo, echo=TRUE}
+library(pander)
+pander(sessionInfo())
+```
