@@ -1,15 +1,19 @@
 ---
 title: "TCGA Cancer Genomic Analysis using R"
 author: "Jun Kang"
-date: '2019 5 17 '
+date: "2019 5 24"
 output:
-  beamer_presentation: 
+  beamer_presentation:
     colortheme: dove
     fig_height: 4
     fonttheme: professionalfonts
     highlight: espresso
     keep_tex: yes
     theme: CambridgeUS
+  ioslides_presentation:
+    highlight: espresso
+  slidy_presentation:
+    highlight: espresso
 header-includes:
 - \usepackage{graphicx}
 - \usepackage{tikzpagenodes}
@@ -19,7 +23,11 @@ header-includes:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-options(tinytex.verbose = TRUE)
+```
+
+```{r library set, echo=FALSE, message=FALSE}
+library(RTCGAToolbox)
+library(cgdsr)
 ```
 
 ## The Cancer Genome Atlas (TCGA)
@@ -37,16 +45,34 @@ options(tinytex.verbose = TRUE)
 
 ## TCGA genomic data
 
+- Pan-Cancer Atlas
 - **RTCGAToolbox** package
 - **cgdsr** package
 - GDC Data Portal
-- Comprehensive research
+
+## Pan-Cancer Atlas
+
+- https://www.cell.com/pb-assets/consortium/pancanceratlas/pancani3/index.html
+- https://gdc.cancer.gov/node/905/
+- https://gdc.cancer.gov/about-data/publications
+
+## Pan-Cancer Atlas  
+Spatial Organization and Molecular Correlation of Tumor-Infiltrating Lymphocytes Using Deep Learning on Pathology Images. (Cell Rep. 2018 Apr 3;23(1):181-193.e7)  
+
+
+## Pan-Cancer Atlas
+```{r til plot, echo=TRUE, message=FALSE, warning=FALSE, cache=TRUE}
+Til_map <- read.delim('TILMap_TableS1.txt')
+library(dplyr)
+library(ggplot2)
+ggplot(Til_map, aes(x=Study, y=Leukocyte.Fraction)) +
+         geom_boxplot()
+```
 
 ## RTCGAToolbox
 
-- Linux (not Windows)
+- Linux (not Windows, Mac with tar path issues)
 - AWS https://aws.amazon.com/ko/
-- Mac ??
 
 ## RTCGAToolbox
 - https://gdac.broadinstitute.org/
@@ -82,6 +108,8 @@ mRNA[1:2, 1:2]
 
 ## cgdsr
 - cbioportal https://www.cbioportal.org/
+
+## cgdsr
 ```{r cgdsr, echo=TRUE, message=FALSE, cache=TRUE}
 library(cgdsr)
 # Create CGDS object
@@ -93,20 +121,11 @@ getCancerStudies(mycgds)[4:5,1]
 ## GDC Data Portal
 - https://portal.gdc.cancer.gov/
 
-## Comprehensive research 
-- https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=33948919
-
-## Comprehensive research
-```{r til plot, echo=TRUE, message=FALSE, warning=FALSE, cache=TRUE}
-Til_map <- read.delim('TILMap_TableS1.txt')
-library(dplyr)
-library(ggplot2)
-ggplot(Til_map, aes(x=Study, y=Leukocyte.Fraction)) +
-         geom_boxplot()
-```
-
 ## SessionInfo
 ```{r sessionInfo, echo=FALSE}
 library(pander)
 pander(sessionInfo())
 ```
+
+## Presentation file
+http://rpubs.com/JKang/492557
